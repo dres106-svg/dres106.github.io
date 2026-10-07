@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>同理還是同情？小測驗</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family:
+        "Noto Sans TC",
+        "Microsoft JhengHei",
+        Arial,
+        sans-serif;
+    background: linear-gradient(135deg, #e8f5ff, #fff4df);
+    color: #333;
+    min-height: 100vh;
+    padding: 25px 15px;
+}
+
+.container {
+    max-width: 760px;
+    margin: auto;
+}
+
+.card {
+    background: white;
+    border-radius: 24px;
+    padding: 30px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #4a6fa5;
+    margin-top: 0;
+}
+
+.intro {
+    text-align: center;
+    line-height: 1.8;
+    color: #666;
+}
+
+.definition {
+    display: flex;
+    gap: 15px;
+    margin: 25px 0;
+}
+
+.definition div {
+    flex: 1;
+    padding: 15px;
+    border-radius: 15px;
+    line-height: 1.7;
+}
+
+.empathy {
+    background: #fff4c7;
+}
+
+.sympathy {
+    background: #e6f4ff;
+}
+
+.progress {
+    text-align: right;
+    color: #888;
+    margin-bottom: 10px;
+}
+
+.question {
+    background: #f7f8fc;
+    border-radius: 18px;
+    padding: 25px;
+    font-size: 21px;
+    line-height: 1.8;
+    margin: 15px 0 20px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.answer-btn {
+    min-width: 180px;
+    padding: 15px 25px;
+    border: none;
+    border-radius: 15px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.answer-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 12px rgba(0,0,0,0.12);
+}
+
+.btn-empathy {
+    background: #ffe69a;
+}
+
+.btn-sympathy {
+    background: #bfe3ff;
+}
+
+.answer-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+}
+
+.feedback {
+    margin-top: 20px;
+    padding: 18px;
+    border-radius: 15px;
+    line-height: 1.7;
+    display: none;
+}
+
+.correct {
+    background: #e4f7e9;
+    color: #26733d;
+}
+
+.wrong {
+    background: #fff0f0;
+    color: #a33;
+}
+
+.next-btn {
+    display: none;
+    margin: 20px auto 0;
+    padding: 13px 30px;
+    border: none;
+    border-radius: 12px;
+    background: #607fa8;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.next-btn:hover {
+    background: #4d6b91;
+}
+
+.result {
+    text-align: center;
+    display: none;
+}
+
+.score {
+    font-size: 45px;
+    font-weight: bold;
+    color: #4a6fa5;
+}
+
+.restart-btn {
+    padding: 13px 28px;
+    border: none;
+    border-radius: 12px;
+    background: #607fa8;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.tip {
+    margin-top: 25px;
+    background: #f4f4f4;
+    padding: 15px;
+    border-radius: 15px;
+    line-height: 1.7;
+}
+
+@media (max-width: 600px) {
+
+    .card {
+        padding: 20px;
+    }
+
+    .definition {
+        flex-direction: column;
+    }
+
+    .question {
+        font-size: 18px;
+    }
+
+    .answer-btn {
+        width: 100%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="card">
+
+<!-- 首頁 -->
+
+<div id="startPage">
+
+<h1>💛 同理還是同情？</h1>
+
+<p class="intro">
+你能分辨「同理」和「同情」嗎？<br>
+一起來挑戰看看！
+</p>
+
+<div class="definition">
+
+<div class="empathy">
+<strong>💛 同理</strong><br>
+試著站在對方的角度，
+理解對方為什麼會有這樣的感受。
+</div>
+
+<div class="sympathy">
+<strong>💙 同情</strong><br>
+看到別人難過，
+覺得對方很可憐、很辛苦。
+</div>
+
+</div>
+
+<div class="tip">
+<strong>小提示：</strong><br>
+同情比較像「覺得你好可憐」；<br>
+同理比較像「我試著想想，如果我是你，我可能會有什麼感受？」
+</div>
+
+<br>
+
+<div style="text-align:center;">
+<button class="restart-btn" onclick="startQuiz()">
+開始挑戰 🚀
+</button>
+</div>
+
+</div>
+
+
+<!-- 題目頁 -->
+
+<div id="quizPage" style="display:none;">
+
+<div class="progress" id="progress"></div>
+
+<h1>🤔 想一想</h1>
+
+<div class="question" id="question"></div>
+
+<div class="buttons">
+
+<button
+class="answer-btn btn-empathy"
+onclick="answer('同理')">
+💛 同理
+</button>
+
+<button
+class="answer-btn btn-sympathy"
+onclick="answer('同情')">
+💙 同情
+</button>
+
+</div>
+
+<div id="feedback" class="feedback"></div>
+
+<button
+id="nextButton"
+class="next-btn"
+onclick="nextQuestion()">
+下一題 →
+</button>
+
+</div>
+
+
+<!-- 結果頁 -->
+
+<div id="resultPage" class="result">
+
+<h1>🎉 挑戰完成！</h1>
+
+<p>你的成績是：</p>
+
+<div class="score" id="score"></div>
+
+<p id="resultMessage"></p>
+
+<div class="tip">
+
+<strong>記住：</strong><br><br>
+
+💛 <strong>同理</strong>：
+「我試著站在你的角度，理解你的感受。」<br><br>
+
+💙 <strong>同情</strong>：
+「我看到你很辛苦，覺得你很可憐。」
+</div>
+
+<br>
+
+<button class="restart-btn" onclick="restartQuiz()">
+再玩一次 🔄
+</button>
+
+</div>
+
+</div>
+</div>
+
+
+<script>
+
+const questions = [
+
+{
+    text: "同學考試考不好，你說：「你考好差喔，好可憐。」",
+    answer: "同情",
+    explanation: "你看到同學考不好，覺得他很可憐，這比較接近「同情」。"
+},
+
+{
+    text: "同學考試考不好，你說：「你可能很努力準備了，結果考不好，應該會覺得很失望。」",
+    answer: "同理",
+    explanation: "你試著站在同學的角度，理解他可能有的失望感，這是「同理」。"
+},
+
+{
+    text: "同學和好朋友吵架，你說：「你沒有朋友陪你，好可憐喔。」",
+    answer: "同情",
+    explanation: "你覺得同學很可憐，是「同情」。"
+},
+
+{
+    text: "同學和好朋友吵架，你說：「你很在乎這個朋友，所以吵架後應該很難過。」",
+    answer: "同理",
+    explanation: "你嘗試理解同學為什麼難過，這是「同理」。"
+},
+
+{
+    text: "同學比賽輸了，你說：「你輸掉比賽了，好慘喔。」",
+    answer: "同情",
+    explanation: "你看到對方輸掉比賽，替他覺得可惜、難過，屬於「同情」。"
+},
+
+{
+    text: "同學比賽輸了，你說：「你很希望自己可以贏，所以輸掉的時候一定很失望。」",
+    answer: "同理",
+    explanation: "你試著理解對方為什麼失望，是「同理」。"
+},
+
+{
+    text: "同學不小心跌倒，你說：「你跌倒了，好可憐喔！」",
+    answer: "同情",
+    explanation: "看到同學受傷，覺得他很可憐，是「同情」。"
+},
+
+{
+    text: "同學不小心跌倒，你說：「突然跌倒又受傷，一定又痛又嚇到吧。」",
+    answer: "同理",
+    explanation: "你試著想像對方當下又痛又害怕的感受，是「同理」。"
+},
+
+{
+    text: "同學被老師提醒，你說：「你被老師罵了，好慘喔。」",
+    answer: "同情",
+    explanation: "你覺得同學被罵很慘，是「同情」。"
+},
+
+{
+    text: "同學被老師提醒，你說：「突然被老師提醒，你可能會覺得緊張或不好意思。」",
+    answer: "同理",
+    explanation: "你試著理解對方可能有的感受，是「同理」。"
+},
+
+{
+    text: "同學忘記帶作業，你說：「你怎麼這麼倒楣。」",
+    answer: "同情",
+    explanation: "你替同學覺得倒楣、可惜，比較接近「同情」。"
+},
+
+{
+    text: "同學忘記帶作業，你說：「你可能不是故意忘記，突然被提醒應該會覺得很緊張。」",
+    answer: "同理",
+    explanation: "你先想想對方的處境，再理解他可能的感受，這是「同理」。"
+}
+
+];
+
+let currentQuestion = 0;
+let score = 0;
+let answered = false;
+
+
+function startQuiz() {
+
+    currentQuestion = 0;
+    score = 0;
+
+    document.getElementById("startPage").style.display = "none";
+    document.getElementById("resultPage").style.display = "none";
+    document.getElementById("quizPage").style.display = "block";
+
+    showQuestion();
+}
+
+
+function showQuestion() {
+
+    answered = false;
+
+    const q = questions[currentQuestion];
+
+    document.getElementById("progress").textContent =
+        "第 " + (currentQuestion + 1) +
+        " / " + questions.length + " 題";
+
+    document.getElementById("question").textContent = q.text;
+
+    const feedback = document.getElementById("feedback");
+
+    feedback.style.display = "none";
+    feedback.className = "feedback";
+
+    document.getElementById("nextButton").style.display = "none";
+
+    document.querySelectorAll(".answer-btn").forEach(function(button) {
+        button.disabled = false;
+    });
+}
+
+
+function answer(choice) {
+
+    if (answered) return;
+
+    answered = true;
+
+    const q = questions[currentQuestion];
+
+    const feedback = document.getElementById("feedback");
+
+    if (choice === q.answer) {
+
+        score++;
+
+        feedback.className = "feedback correct";
+
+        feedback.innerHTML =
+            "<strong>✅ 答對了！</strong><br><br>" +
+            q.explanation;
+
+    } else {
+
+        feedback.className = "feedback wrong";
+
+        feedback.innerHTML =
+            "<strong>❌ 再想一想！</strong><br><br>" +
+            "這一題比較接近「" + q.answer + "」。<br><br>" +
+            q.explanation;
+    }
+
+    feedback.style.display = "block";
+
+    document.querySelectorAll(".answer-btn").forEach(function(button) {
+        button.disabled = true;
+    });
+
+    document.getElementById("nextButton").style.display = "block";
+}
+
+
+function nextQuestion() {
+
+    currentQuestion++;
+
+    if (currentQuestion < questions.length) {
+
+        showQuestion();
+
+    } else {
+
+        showResult();
+    }
+}
+
+
+function showResult() {
+
+    document.getElementById("quizPage").style.display = "none";
+
+    document.getElementById("resultPage").style.display = "block";
+
+    document.getElementById("score").textContent =
+        score + " / " + questions.length;
+
+    let message = "";
+
+    if (score === questions.length) {
+
+        message = "🌟 太厲害了！你已經很會分辨同理和同情了！";
+
+    } else if (score >= 9) {
+
+        message = "👏 很棒！你對同理和同情的差別很清楚！";
+
+    } else if (score >= 6) {
+
+        message = "👍 不錯喔！再多想想兩者的差別，你會更厲害！";
+
+    } else {
+
+        message = "💪 沒關係！再玩一次，試著注意「可憐」和「理解感受」的差別。";
+    }
+
+    document.getElementById("resultMessage").textContent = message;
+}
+
+
+function restartQuiz() {
+
+    document.getElementById("resultPage").style.display = "none";
+
+    document.getElementById("startPage").style.display = "block";
+}
+
+</script>
+
+</body>
+</html>
